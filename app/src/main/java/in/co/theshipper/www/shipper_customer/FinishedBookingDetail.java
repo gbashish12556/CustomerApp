@@ -54,17 +54,19 @@ public class FinishedBookingDetail extends Fragment{
         // Required empty public constructor
         super.onAttach(context);
         this.context = context;
-        Fn.logD("COMPLETED_BOOKING_DETAILS_FRAGMENT_LIFECYCLE", "onAttach Called");
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Fn.logD("COMPLETED_BOOKING_DETAILS_FRAGMENT_LIFECYCLE", "onCreateView Called");
         // Inflate the layout for this fragment
         if (container == null) {
+
             return null;
+
         } else {
+
             // Inflate the layout for this fragment
             view = inflater.inflate(R.layout.fragment_finished_booking_detail, container, false);
             received_pickup_point_view=(TextView)view.findViewById(R.id.pickup_point);
@@ -84,79 +86,93 @@ public class FinishedBookingDetail extends Fragment{
             drivericon=(ImageView)view.findViewById(R.id.driver_imageview);
             vehicleicon=(ImageView)view.findViewById(R.id.vehicleimage);
             popup=(ImageView)dialog.findViewById(R.id.image_popup);
+
             if((getActivity().getIntent()!=null)&&(getActivity().getIntent().getExtras()!=null)) {
-                Fn.logD("getActivity().getIntent().getExtras()","getActivity().getIntent().getExtras()");
+
                 Bundle bundle = getActivity().getIntent().getExtras();
                 crn_no = Fn.getValueFromBundle(bundle,"crn_no");
-                Fn.logD("received_crn_no_intent",crn_no);
                 getActivity().getIntent().setData(null);
                 getActivity().setIntent(null);
+
             }else if(this.getArguments()!=null) {
-                Fn.logD("getArguments","getArguments");
+
                 Bundle bundle = this.getArguments();
                 crn_no = Fn.getValueFromBundle(bundle, "crn_no");
-                Fn.logD("received_crn_no_argument",crn_no);
+
             }
-            Fn.SystemPrintLn(crn_no);
             return view;
+
         }
+
     }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         HashMap<String,String>  hashMap= new HashMap<String,String>();
         String booking_status_url = Constants.Config.ROOT_PATH+"get_completed_booking_status";
-        // String CrnNo = Fn.getPreference(getActivity(),"current_crn_no");
         String user_token = Fn.getPreference(getActivity(),"user_token");
         hashMap.put("crn_no", crn_no);
         hashMap.put("user_token", user_token);
         sendVolleyRequest(booking_status_url, Fn.checkParams(hashMap));
+
     }
+
     public void sendVolleyRequest(String URL, final HashMap<String,String> hMap){
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+
                 Fn.logD("onResponse_booking_status", String.valueOf(response));
                 bookingStatusSuccess(response);
+
             }
+
         }, new Response.ErrorListener() {
+
             @Override
             public void onErrorResponse(VolleyError error) {
-                Fn.logD("onErrorResponse", String.valueOf(error));
+
             }
+
         }){
+
             @Override
             protected HashMap<String,String> getParams(){
                 return hMap;
             }
         };
+
         stringRequest.setTag(TAG);
         Fn.addToRequestQue(requestQueue, stringRequest, getActivity());
+
     }
+
     protected void bookingStatusSuccess(String response){
-        Fn.logD("COMPLETED_BOOKING_DETAILS_FRAGMENT_LIFECYCLE", "bookingStatusSuccess Called");
+
         if(!Fn.CheckJsonError(response)){
-//            Fn.logD("bookingStatusSuccess", "bookingStatusSuccess Called");
-            Fn.logD("received_json", response);
+
             JSONObject jsonObject;
             JSONArray jsonArray;
+
             try {
+
                 jsonObject = new JSONObject(response);
-                //jsonArray = jsonObject.getJSONArray("likes");
                 String errFlag = jsonObject.getString("errFlag");
                 String errMsg = jsonObject.getString("errMsg");
-                if(errFlag.equals("1")){
-                    Fn.logD("toastNotdone","toastNotdone");
-                }
-                else if(errFlag.equals("0"))
+
+                if(errFlag.equals("0"))
                 {
                     if(jsonObject.has("likes"))
                     {
                         jsonArray = jsonObject.getJSONArray("likes");
                         int count = 0;
+
                         while (count < jsonArray.length())
                         {
-                            Fn.logD("likes_entered", "likes_entered");
+
                             JSONObject JO = jsonArray.getJSONObject(count);
                             String received_exact_pickup_point = JO.getString("exact_pickup_point");
                             String received_exact_dropoff_point = JO.getString("exact_dropoff_point");
@@ -169,14 +185,20 @@ public class FinishedBookingDetail extends Fragment{
                             String received_driver_mobile_no = JO.getString("driver_mobile_no");
                             booking_id = JO.getString("booking_id");
                             driver_rating = Float.parseFloat(JO.getString("driver_rating"));
+
                             if(driver_rating == 0.0f){
+
                                 handleRating();
+
                             }
                             else{
+
                                 ratingText.setText("You Rated");
                                 ratingBar.setRating(driver_rating);
                                 ratingBar.setIsIndicator(true);
+
                             }
+
                             received_pickup_point_view.setText(received_exact_pickup_point);
                             received_driver_mobile_no_view.setText(received_driver_mobile_no);
                             received_dropoff_point_view.setText(received_exact_dropoff_point);
@@ -187,10 +209,13 @@ public class FinishedBookingDetail extends Fragment{
                             received_total_fare_view.setText(received_total_fare + " Rs");
                             String driver_profile_pic_url=JO.getString("driver_profile_pic_url");
                             String profile_pic_url = Constants.Config.ROOT_PATH+driver_profile_pic_url;
-                            Fn.logD("profile_pic_url", profile_pic_url);
+
                             if(driver_profile_pic_url.length()>0){
+
                                 downloadBitmapFromURL(profile_pic_url);
+
                             }else{
+
                                 drivericon.setImageResource(R.drawable.addcontact);
                                 drivericon.setOnClickListener(new View.OnClickListener() {
                                     @Override
@@ -199,27 +224,40 @@ public class FinishedBookingDetail extends Fragment{
                                         dialog.show();
                                     }
                                 });
+
                             }
-                           // ImageView imageView = (ImageView) view.findViewById(R.id.driver_image);
-                          //  imageView.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.vehicle_4));
+
                             vehicleicon.setImageResource(Fn.getVehicleImage(Integer.parseInt(received_vehicletype_id)));
                             vehicleicon.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+
                                     popup.setImageResource(Fn.getVehicleImage(Integer.parseInt(received_vehicletype_id)));
                                     dialog.show();
+
                                 }
                             });
+
                             count++;
+
                         }
+
                     }
+
                 }
+
             } catch (JSONException e) {
+
                 e.printStackTrace();
+
             }
+
         }
+
     }
+
     protected void handleRating(){
+
         ratingText.setText("Rate your driver");
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
@@ -235,9 +273,11 @@ public class FinishedBookingDetail extends Fragment{
 
             }
         });
+
     }
     protected void downloadBitmapFromURL(String profile_pic_url){
-//        RequestQueue requestQueue;
+
+        //        RequestQueue requestQueue;
         final Bitmap[] return_param = new Bitmap[1];
         ImageRequest imageRequest = new ImageRequest(profile_pic_url, new Response.Listener<Bitmap>() {
             @Override
@@ -250,7 +290,6 @@ public class FinishedBookingDetail extends Fragment{
                         dialog.show();
                     }
                 });
-//                driverimage = response;
             }
         }, 0, 0, null, null);
         imageRequest.setTag(TAG);

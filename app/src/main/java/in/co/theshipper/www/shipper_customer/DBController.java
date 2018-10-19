@@ -86,93 +86,107 @@ public class DBController  extends SQLiteOpenHelper {
     //Creates Table
     @Override
     public void onCreate(SQLiteDatabase database) {
-        Fn.logD("DBController_onCreate","onCreate");
+
         try {
+
             database.execSQL(CREATE_TABLE_VIEW_BASE_FARE);
             database.execSQL(CREATE_TABLE_VIEW_CITY);
             database.execSQL(CREATE_TABLE_VIEW_PRICING);
             database.execSQL(CREATE_TABLE_VIEW_VEHICLE_TYPE);
             database.execSQL(CREATE_TABLE_CONTACTSDB);
-//            database.close();
+
         } catch (SQLException e) {
+
             e.printStackTrace();
+
         }
+
     }
+
     @Override
     public void onUpgrade(SQLiteDatabase database, int version_old, int current_version) {
-        Fn.logD("DBController_onUpgrade","onUpgrade");
+
         try {
+
             database.execSQL(DELETE_VIEW_BASE_FARE);
             database.execSQL(DELETE_VIEW_CITY);
             database.execSQL(DELETE_VIEW_PRICING);
             database.execSQL(DELETE_VIEW_VEHICLE_TYPE);
             database.execSQL(DELETE_CONTACTSDB);
+
         } catch (SQLException e) {
+
             e.printStackTrace();
+
         }
+
         onCreate(database);
+
     }
-    public void createTable(int table_no)
-    {
-        Fn.logD("DBController_createTable","createTable");
-        try {
-            SQLiteDatabase database = this.getWritableDatabase();
-            if(table_no==0){
-                database.execSQL(CREATE_TABLE_VIEW_BASE_FARE);
-            }
-            else if(table_no==1){
-                database.execSQL(CREATE_TABLE_VIEW_CITY);
-            }
-            else if(table_no==2){
-                database.execSQL(CREATE_TABLE_VIEW_PRICING);
-            }
-            else{
-                database.execSQL(CREATE_TABLE_VIEW_VEHICLE_TYPE);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+
+
     public void deleteTable(int table_no) {
-        Fn.logD("DBController_deleteTable","deleteTable");
+
         try {
+
             SQLiteDatabase database = this.getWritableDatabase();
+
             if (table_no == 0) {
+
                 database.execSQL(DELETE + TABLE_VIEW_BASE_FARE);
+
             } else if (table_no == 1) {
+
                 database.execSQL(DELETE + TABLE_VIEW_CITY);
+
             } else if (table_no == 2) {
+
                 database.execSQL(DELETE + TABLE_VIEW_PRICING);
+
             } else  {
+
                 database.execSQL(DELETE + TABLE_VIEW_VEHICLE_TYPE);
+
             }
-//            database.close();
+
         } catch (SQLException e) {
+
             e.printStackTrace();
+
         }
+
     }
 
     public void deleteContacts(String number)
     {
+
         try {
+
             SQLiteDatabase database = this.getWritableDatabase();
             database.execSQL("DELETE FROM contactsdb WHERE number = '" + number + "'");
-//            database.close();
+
         } catch (SQLException e) {
+
             e.printStackTrace();
+
         }
+
     }
+
     /**
      * Inserts User into SQLite DB
      * @param queryValues
      */
+
     public void insert(HashMap<String, String> queryValues,int table_no) {
+
         try {
+
             SQLiteDatabase database = this.getWritableDatabase();
             ContentValues values = new ContentValues();
-            Fn.logD("DBController_insert", "insert");
-            if(table_no==0){
-                Fn.logD("table_no", "0");
+
+            if (table_no == 0) {
+
                 values.put(VEHICLETYPE_ID, queryValues.get(VEHICLETYPE_ID));
                 values.put(CITY_ID, queryValues.get(CITY_ID));
                 values.put(VEHICLE_NAME, queryValues.get(VEHICLE_NAME));
@@ -187,21 +201,18 @@ public class DBController  extends SQLiteOpenHelper {
                 values.put(IS_ACTIVE, queryValues.get(IS_ACTIVE));
                 values.put(UPDATE_DATE, queryValues.get(UPDATE_DATE));
                 database.insert(TABLE_VIEW_BASE_FARE, null, values);
-//                database.close();
-            }
-            else if(table_no==1){
 
-                Fn.logD("table_no", "1");
+            }
+            else if (table_no == 1) {
+
                 values.put(CITY_ID, queryValues.get(CITY_ID));
                 values.put(CITY_NAME, queryValues.get(CITY_NAME));
                 values.put(IS_ACTIVE, queryValues.get(IS_ACTIVE));
                 values.put(UPDATE_DATE, queryValues.get(UPDATE_DATE));
                 database.insert(TABLE_VIEW_CITY, null, values);
-//                database.close();
             }
-            else if(table_no==2){
+            else if (table_no == 2) {
 
-                Fn.logD("table_no", "2");
                 values.put(VEHICLETYPE_ID, queryValues.get(VEHICLETYPE_ID));
                 values.put(CITY_ID, queryValues.get(CITY_ID));
                 values.put(VEHICLE_NAME, queryValues.get(VEHICLE_NAME));
@@ -211,52 +222,30 @@ public class DBController  extends SQLiteOpenHelper {
                 values.put(IS_ACTIVE, queryValues.get(IS_ACTIVE));
                 values.put(UPDATE_DATE, queryValues.get(UPDATE_DATE));
                 database.insert(TABLE_VIEW_PRICING, null, values);
-//                database.close();
+
             }
-            else if(table_no==3){
-                Fn.logD("table_no", "3");
+            else if(table_no == 3) {
+
                 values.put(VEHICLETYPE_ID, queryValues.get(VEHICLETYPE_ID));
                 values.put(VEHICLE_NAME, queryValues.get(VEHICLE_NAME));
                 values.put(IS_ACTIVE, queryValues.get(IS_ACTIVE));
                 values.put(UPDATE_DATE, queryValues.get(UPDATE_DATE));
                 database.insert(TABLE_VIEW_VEHICLE_TYPE, null, values);
-//                database.close();
+
             }
-            else{
+            else {
+
                 values.put("name",queryValues.get("name"));
                 values.put("number", queryValues.get("number"));
                 database.insert("contactsdb", null, values);
-//                database.close();
             }
-//            database.close();
+
         } catch (Exception e) {
+
             e.printStackTrace();
+
         }
 
-    }
-
-    /**
-     * Get list of Users from SQLite DB as Array List
-     * @return
-     */
-    public void getAll() throws ParseException {
-        try {
-            String selectQuery = "SELECT  base_fare, transit_charge  FROM view_base_fare";
-            SQLiteDatabase database = this.getWritableDatabase();
-            Cursor cursor = database.rawQuery(selectQuery, null);
-            Fn.logD("ArrayList", "ArrayList");
-            if (cursor.moveToFirst()) {
-                do {
-
-                    Fn.logD("onCreate",cursor.getString(0)+" "+cursor.getString(1));
-
-
-                } while (cursor.moveToNext());
-            }
-//            database.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 }

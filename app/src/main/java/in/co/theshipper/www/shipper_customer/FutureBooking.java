@@ -48,91 +48,109 @@ public class FutureBooking extends Fragment  {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         if (container == null) {
+
             return null;
+
         } else {
+
             View v = inflater.inflate(R.layout.fragment_future_booking, container, false);
             list = (ListView) v.findViewById(R.id.future_booking_list);
             return v;
         }
+
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+
         super.onActivityCreated(savedInstanceState);
+
         listAdapter = new SimpleAdapter(getContext(),values,R.layout.booking_list_view,new String[] {"crn_no","vehicle_type","datetime1","pickup_point","dropoff_point","vehicle_image"},
                 new int[] {R.id.crn_no,R.id.vehicle_type, R.id.datetime1,R.id.pickup_point,R.id.dropoff_point,R.id.vehicle_image});
         list.setAdapter(listAdapter);
-        Fn.SystemPrintLn("***Future Volley request first time****");
         createRequest(0);
+
         list.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public void onLoadMore(int page) {
-                Fn.SystemPrintLn("*****page on loadMore: " + page);
+
                 createRequest(page);
-                //return true;
             }
         });
-        Fn.logD("Entered","onActivityCreated of FutureBooking");
 
     }
 
     private void createRequest(final int page_no){
+
         if(getActivity() !=  null) {
+
             final String user_token = Fn.getPreference(getActivity(), "user_token");
+
             StringRequest stringRequest = new StringRequest(Request.Method.POST, Constants.Config.ROOT_PATH + "future_booking_list",
+
                     new Response.Listener<String>() {
+
                         @Override
                         public void onResponse(String response) {
-                            //Toast.makeText(MainActivity.this,response,Toast.LENGTH_LONG).show();
-                            Fn.logD("Response for FUTURE_BOOKING_FRAGMENT recieved", response);
+
                             uiUpdate(response);
+
                         }
+
                     },
                     new Response.ErrorListener() {
+
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            //Toast.makeText(MainActivity.this,error.toString(),Toast.LENGTH_LONG).show();
-                            Fn.logD("error", ": volley request failed");
-//                        ErrorDialog(Constants.Title.NETWORK_ERROR, Constants.Message.NETWORK_ERROR);
+
                             Fn.ToastShort(getActivity(), Constants.Message.NETWORK_ERROR);
+
                         }
+
                     }) {
+
                 @Override
                 protected HashMap<String, String> getParams() {
+
                     HashMap<String, String> params = new HashMap<String, String>();
                     params.put("user_token", user_token);
                     params.put("page_no", String.valueOf(page_no));
-//                Fn.logD("user_token",user_token);
                     return Fn.checkParams(params);
+
                 }
 
             };
+
             requestQueue = Volley.newRequestQueue(getContext());
             stringRequest.setTag(TAG);
             requestQueue.add(stringRequest);
+
         }
+
     }
+
     private void uiUpdate(String response)
     {
+
         if(getActivity() !=  null) {
-            System.out.println("####FUTURE response :::: " + response);
+
             try {
+
                 if (!Fn.CheckJsonError(response)) {
-                    String errFlag;
-                    String errMsg;
+
                     JSONObject jsonObject = new JSONObject(response);
-                    errFlag = jsonObject.getString("errFlag");
-                    errMsg = jsonObject.getString("errMsg");
-                    Fn.logD("response errflag and errMsg", errFlag + " " + errMsg);
                     JSONObject UpdationObject;
                     JSONArray jsonArray;
+
                     if (jsonObject.has("likes")) {
+
                         jsonArray = jsonObject.getJSONArray("likes");
                         int count = 0;
+
                         while (count < jsonArray.length()) {
+
                             UpdationObject = jsonArray.getJSONObject(count);
                             HashMap<String, String> qvalues = new HashMap<String, String>();
-                            Fn.logD("crn_no and datetime1 recieved ", UpdationObject.get("crn_no").toString() + UpdationObject.get("datetime1").toString());
                             qvalues.put("crn_no", UpdationObject.get("crn_no").toString());
                             qvalues.put("vehicle_type", Fn.VehicleName(UpdationObject.get("vehicletype_id").toString(), getActivity()));
                             qvalues.put("datetime1", Fn.getDateName(UpdationObject.get("datetime1").toString()));
@@ -141,26 +159,30 @@ public class FutureBooking extends Fragment  {
                             qvalues.put("vehicle_image", Integer.toString(Fn.getVehicleImage(Integer.parseInt(UpdationObject.get("vehicletype_id").toString()))));
                             values.add(qvalues);
                             count++;
+
                         }
+
                     }
+
                 } else {
-//                ErrorDialog(Constants.Title.SERVER_ERROR,Constants.Message.SERVER_ERROR);
+
                     Fn.ToastShort(getActivity(), Constants.Message.SERVER_ERROR);
+
                 }
+
             } catch (Exception e) {
+
                 // handle exception
-                Fn.logE("log_tag", "Error parsing data " + e.toString());
             }
+
             ((BaseAdapter) listAdapter).notifyDataSetChanged();
+
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Fn.logD("Clicked at position :", String.valueOf(position));
+
                     View child_view = list.getChildAt(position - list.getFirstVisiblePosition());
-                    Fn.logD("Child View  :", String.valueOf(child_view));
                     TextView crn_no = (TextView) child_view.findViewById(R.id.crn_no);
-//                String PhoneNum = number.getText().toString();
-                    Fn.logD("onItemClick", "list clicked at position: " + position + " value crn_no =" + crn_no.getText());
                     Fragment fragment = new Fragment();
                     fragment = new BookingDetails();
                     Bundle bundle = new Bundle();
@@ -168,43 +190,50 @@ public class FutureBooking extends Fragment  {
                     fragment.setArguments(Fn.CheckBundle(bundle));
                     FragmentManager fragmentManager = FullActivity.fragmentManager;
                     FragmentTransaction transaction = fragmentManager.beginTransaction();
-//                Fragment fragment = new BookNow();
                     transaction.replace(R.id.main_content, fragment, Constants.Config.CURRENT_FRAG_TAG);
+
                     if ((FullActivity.homeFragmentIndentifier == -5)) {
+
                         transaction.addToBackStack(null);
                         FullActivity.homeFragmentIndentifier = transaction.commit();
+
                     } else {
+
                         transaction.commit();
-                        Fn.logD("fragment instanceof Book", "homeidentifier != -1");
+
                     }
+
                     ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.title_future_booking_detail_fragment);
+
                 }
             });
+
         }
+
     }
-    private void ErrorDialog(String Title,String Message){
-        if(getActivity() !=  null) {
-            Fn.showDialog(getActivity(), Title, Message);
-        }
-    }
+
     @Override
     public void onResume() {
         super.onResume();
-        //requestQueue.start();
+
         Fn.startAllVolley(requestQueue);
-        Fn.logE("FUTURE_BOOKING_FRAGMENT_LIFECYCLE", "onResume Called");
+
     }
+
     @Override
     public void onPause() {
         super.onPause();
+
         Fn.startAllVolley(requestQueue);
-        Fn.logE("FUTURE_BOOKING_FRAGMENT_LIFECYCLE", "onPause Called");
+
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
         Fn.cancelAllRequest(requestQueue, TAG);
-        Fn.logE("FUTURE_BOOKING_FRAGMENT_LIFECYCLE", "onDestroy Called");
+
     }
 
 }

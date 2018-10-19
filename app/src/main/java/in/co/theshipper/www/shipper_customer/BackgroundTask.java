@@ -42,9 +42,6 @@ public class BackgroundTask extends AsyncTask<String,Void, String> {
             //PreferenceManager.getDefaultSharedPreferences(ctx).edit().putString("OTP", String.valueOf(otp)).putString("mobile_no", String.valueOf(mobile_no)).commit();
             Fn.putPreference(ctx,"OTP",String.valueOf(otp));
             Fn.putPreference(ctx,"mobile_no",String.valueOf(mobile_no));
-            Fn.logD("ONE_TIME_PASS",String.valueOf(otp));
-            //Fn.Toast(ctx,reg_url);
-            Log.d("reg_url", reg_url);
             try {
                 String data = URLEncoder.encode("mobile_no", "UTF-8")+"="+URLEncoder.encode(mobile_no,"UTF-8")+"&"+
                         URLEncoder.encode("OTP","UTF-8")+"="+URLEncoder.encode(String.valueOf(otp),"UTF-8");
@@ -57,9 +54,7 @@ public class BackgroundTask extends AsyncTask<String,Void, String> {
         {
             String mobile_no = "";
             String get_user_info_url = Constants.Config.ROOT_PATH+"get_customer_info";
-            Fn.logD("get_user_info_url",get_user_info_url);
             mobile_no =  Fn.getPreference(ctx,"mobile_no");
-            Fn.logD("mobile_no",mobile_no);
             try {
                 String data = URLEncoder.encode("mobile_no","UTF-8")+"="+URLEncoder.encode(mobile_no, "UTF-8");
                 JSON_STRING =  Fn.AndroidToServer(ctx,get_user_info_url,data);
@@ -70,12 +65,9 @@ public class BackgroundTask extends AsyncTask<String,Void, String> {
         else if(method.equals("edit_customer_profile"))
         {
             String edit_customer_profile_url = Constants.Config.ROOT_PATH+"edit_customer_profile";
-            Fn.logD("edit_profile_url",edit_customer_profile_url);
             String name = params[1];
             String email = params[2];
             String postal_address = params[3];
-            //Log.d("reg_url",edit_customer_profile_url);
-            //PreferenceManager.getDefaultSharedPreferences(ctx).edit().putString("name",name).commit();
             Fn.putPreference(ctx,"name",name);
             try {
                 String data = URLEncoder.encode("name","UTF-8")+"="+URLEncoder.encode(name,"UTF-8")+"&"+
@@ -83,7 +75,6 @@ public class BackgroundTask extends AsyncTask<String,Void, String> {
                         URLEncoder.encode("postal_address","UTF-8")+"="+URLEncoder.encode(postal_address,"UTF-8")+"&"+
                         URLEncoder.encode("user_token","UTF-8")+"="+URLEncoder.encode(user_token,"UTF-8");
                 JSON_STRING = Fn.AndroidToServer(ctx,edit_customer_profile_url,data);
-                Fn.logD("edit_JSON_STRING", JSON_STRING);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -91,7 +82,6 @@ public class BackgroundTask extends AsyncTask<String,Void, String> {
         else if(method.equals("update_customer_location"))
         {
             String update_customer_location_url = Constants.Config.ROOT_PATH+"update_customer_location";
-            Fn.logD("customer_location",update_customer_location_url);
             String lattitude = params[1];
             String longitude = params[2];
             try {
@@ -99,7 +89,6 @@ public class BackgroundTask extends AsyncTask<String,Void, String> {
                         URLEncoder.encode("longitude","UTF-8")+"="+URLEncoder.encode(longitude,"UTF-8")+"&"+
                         URLEncoder.encode("user_token","UTF-8")+"="+URLEncoder.encode(user_token,"UTF-8");
                 JSON_STRING = Fn.AndroidToServer(ctx,update_customer_location_url,data);
-                Fn.logD("custom_location_json", JSON_STRING);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -109,13 +98,11 @@ public class BackgroundTask extends AsyncTask<String,Void, String> {
             String book_now_url = Constants.Config.ROOT_PATH+"book_now";
             String vehicle_type = params[1];
             String datetime = Fn.getDateTimeNow();
-            Fn.logD("book_now_url",book_now_url);
             try {
                 String data = URLEncoder.encode("user_token","UTF-8")+"="+URLEncoder.encode(user_token,"UTF-8")+"&"+
                         URLEncoder.encode("vehicle_type","UTF-8")+"="+URLEncoder.encode(vehicle_type,"UTF-8")+"&"+
                         URLEncoder.encode("datetime","UTF-8")+"="+URLEncoder.encode(datetime,"UTF-8");
                 JSON_STRING = Fn.AndroidToServer(ctx,book_now_url,data);
-                Fn.logD("custom_location_json", JSON_STRING);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -138,7 +125,6 @@ public class BackgroundTask extends AsyncTask<String,Void, String> {
         if(!Fn.CheckJsonError(result))
         {
             if (method.equals("get_customer_info")) {
-                //Log.d("json_result",result);
                 Intent intent = new Intent(ctx, EditProfile.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra("JSON_STRING", result);
@@ -155,19 +141,13 @@ public class BackgroundTask extends AsyncTask<String,Void, String> {
     }
     public String getCrnNo(String JsonString){
         String errFlag;
-        String errMsg;
         String received_crn_no = "DefaultIsNothing";
         JSONObject jsonObject;
         JSONArray jsonArray;
         try {
             jsonObject = new JSONObject(JsonString);
-            //jsonArray = jsonObject.getJSONArray("likes");
             errFlag = jsonObject.getString("errFlag");
-            errMsg = jsonObject.getString("errMsg");
-            if(errFlag.equals("1")){
-                Fn.logD("toastNotdone","toastNotdone");
-            }
-            else if(errFlag.equals("0"))
+             if(errFlag.equals("0"))
             {
                 if(jsonObject.has("likes")) {
                     jsonArray = jsonObject.getJSONArray("likes");
@@ -176,7 +156,6 @@ public class BackgroundTask extends AsyncTask<String,Void, String> {
                         Fn.logD("likes_entered", "likes_entered");
                         JSONObject JO = jsonArray.getJSONObject(count);
                         received_crn_no = JO.getString("crn_no");
-//                        Fn.putPreference(this,"crn_no",received_crn_no);
                         count++;
                     }
                 }

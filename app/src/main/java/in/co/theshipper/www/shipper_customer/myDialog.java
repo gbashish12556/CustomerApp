@@ -17,11 +17,14 @@ import android.widget.ImageView;
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class myDialog extends DialogFragment {
+
     View v;
     ImageView popup;
     Dialog d;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
         AlertDialog.Builder b=new AlertDialog.Builder(getActivity());
         View v=getActivity().getLayoutInflater().inflate(R.layout.dialog, null);
          d=b.create();
@@ -29,7 +32,9 @@ public class myDialog extends DialogFragment {
         popup.setImageResource(R.drawable.vehicle_1_on);
         b.setView(v);
         return d;
+
     }
+
 }
 
 

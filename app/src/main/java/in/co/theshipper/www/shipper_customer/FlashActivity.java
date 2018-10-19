@@ -64,13 +64,13 @@ import java.util.concurrent.TimeUnit;
 import static com.google.android.gms.internal.zzir.runOnUiThread;
 
 public class FlashActivity extends AppCompatActivity implements  GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
+
     protected  String TAG = FlashActivity.class.getName();
     protected RequestQueue requestQueue;
     protected  DBController controller;
     protected SQLiteDatabase database;
     private  HashMap<String, String> queryValues;
     private TextView error_message;
-//    ProgressBar progressBar;
     private int googleCount = 0;
     private Boolean stopTimer = false,stopForEver = false;
     private Timer timer;
@@ -81,31 +81,40 @@ public class FlashActivity extends AppCompatActivity implements  GoogleApiClient
     protected static final int REQUEST_CHECK_SETTINGS = 0x1;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
     private GoogleApiClient mGoogleApiClient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         getSupportActionBar().hide();
         setContentView(R.layout.activity_flash);
-        Fn.logE("FLASH_ACTIVITY_LIFECYCLE", "onCreate");
         getSupportActionBar().hide();
         controller = new DBController(this);
         error_message = (TextView) findViewById(R.id.error_message);
-// Create an instance of GoogleAPIClient.
+
         if (mGoogleApiClient == null) {
+
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
                     .build();
             mGoogleApiClient.connect();
+
         }
+
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         switch (requestCode) {
-// Check for the integer request code originally supplied to startResolutionForResult().
+
+            // Check for the integer request code originally supplied to startResolutionForResult().
             case REQUEST_CHECK_SETTINGS:
+
                 switch (resultCode) {
+
                     case Activity.RESULT_OK:
 //                        startLocationUpdates();
                         TimerProgramm();
@@ -113,139 +122,214 @@ public class FlashActivity extends AppCompatActivity implements  GoogleApiClient
                     case Activity.RESULT_CANCELED:
                         Fn.showGpsAutoEnableRequest(mGoogleApiClient, this);//keep asking if imp or do whatever
                         break;
+
                 }
+
                 break;
+
         }
+
     }
+
     @Override
     protected void onResume() {
-        Fn.logE("FLASH_ACTIVITY_LIFECYCLE", "onResume");
+
         super.onResume();
         Fn.startAllVolley(requestQueue);
         stopTimer = false;
         mGoogleApiClient.connect();
-        Fn.logE("google_connected", "true");
+
         if (checkPlayServices())
         {
-            Fn.logE("checkPlayServices", "true");
+
             if (Fn.isGpsEnabled(this)) {
+
                 if (Fn.isNetworkEnabled(this)) {
-                    Fn.logE("isNetworkEnabled", "true");
+
                     if (mGoogleApiClient.isConnected()) {
-                        Fn.logE("mGoogleApiClient", "true");
+
                         isNetworkEnabled = true;
                         location = Fn.getAccurateCurrentlocation(mGoogleApiClient, this);
+
                         if (location != null) {
+
                             String current_address = Fn.getLocationAddress(location.getLatitude(),location.getLongitude(),this);
                             Fn.putPreference(this,Constants.Keys.MY_CURRENT_ADDRESS,current_address);
                             getCity(location);
+
                         } else {
+
                             if (timer == null) {
+
                                 TimerProgramm();
+
                             }
+
                         }
+
                     } else {
+
                         googleCount++;
+
                         if (timer == null) {
+
                             TimerProgramm();
+
                         }
+
                     }
+
                 } else {
+
                     ErrorDialog(Constants.Title.NETWORK_ERROR, Constants.Message.NETWORK_ERROR);
+
                     if (timer == null) {
+
                         TimerProgramm();
+
                     }
+
                 }
+
             } else {
+
                 Fn.showGpsAutoEnableRequest(mGoogleApiClient, this);
+
             }
+
         }
+
     }
+
     public void TimerProgramm() {
+
         Fn.showProgressDialogLong(Constants.Message.CONNECTING, this);
-        Fn.logD("TimerProgram", "TimerProgram");
         int delay = Constants.Config.DELAY_LOCATION_CHECK; // delay for 0 sec.
         int period = Constants.Config.PERIOD_LOCATION_CHECK; // repeat every 100 msec.
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
+
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        Fn.logD("TimerProgram_running", "TimerProgram_running");
+
                         if ((stopTimer != true)&&(stopForEver != true)) {
                             checkLocation();
                         }
+
                     }
                 });
+
             }
         }, delay, period);
+
     }
+
     public void checkLocation(){
+
         if(Fn.isNetworkEnabled(this)){
               if (mGoogleApiClient.isConnected()) {
-                   Fn.logE("mGoogleApiClient", "true");
-                Fn.logE("isNetworkEnabled", "true");
+
                   location = Fn.getAccurateCurrentlocation(mGoogleApiClient, this);
+
                 if (location != null) {
+
                     stopForEver = true;
                    getCity(location);
+
                 }
+
             }
+
         } else {
+
             googleCount++;
+
             if(googleCount == 3) {
+
                 stopForEver = true;
                 ErrorDialog(Constants.Title.NETWORK_ERROR, Constants.Message.NETWORK_ERROR);
+
             }
+
         }
+
     }
+
     @Override
     public void onPause() {
+
         super.onPause();
-        Fn.logE("FLASH_ACTIVITY_LIFECYCLE", "onPause Called");
+
         Fn.stopAllVolley(requestQueue);
+
         if(mGoogleApiClient.isConnected()){
             mGoogleApiClient.disconnect();
         }
+
         stopTimer = true;
+
     }
+
     @Override
     protected void onDestroy() {
-        Fn.logE("FLASH_ACTIVITY_LIFECYCLE","onDestroy Called");
         super.onDestroy();
+
         Fn.cancelAllRequest(requestQueue,TAG);
+
         if(timer != null){
+
             timer.cancel();
             timer = null;
+
         }
+
     }
     private boolean checkPlayServices() {
+
         GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
         int result = googleAPI.isGooglePlayServicesAvailable(this);
+
         if(result != ConnectionResult.SUCCESS) {
+
             if(googleAPI.isUserResolvableError(result)) {
+
                 googleAPI.getErrorDialog(this,result,1).show();
+
             }
+
             return false;
+
         }
+
         return true;
+
     }
+
     public void NextActivity() {
+
         String user_token = Fn.getPreference(this, "user_token");
-        Fn.logD("user_token", user_token);
+
         if (!user_token.equals("defaultStringIfNothingFound")) {
+
             Intent intent1 = new Intent(this, FullActivity.class);
             intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent1);
             finish();
+
         }else {
+
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
+
         }
+
     }
+
     class fetch extends AsyncTask<String, String, Void> {
+
         // private ProgressDialog progressDialog = new ProgressDialog(MainActivity.this);
         InputStream is = null;
         String result = "";
@@ -254,6 +338,7 @@ public class FlashActivity extends AppCompatActivity implements  GoogleApiClient
 
         @Override
         protected Void doInBackground(String... params) {
+
             String url_select = Constants.Config.ROOT_PATH+"fetch_view";
             String view_name[] = new String[4];
             view_name[0] = controller.TABLE_VIEW_BASE_FARE;
@@ -267,84 +352,98 @@ public class FlashActivity extends AppCompatActivity implements  GoogleApiClient
             primary_key[3] = controller.VEHICLETYPE_ID;
             String timestamp[] = new String[4];
             String q1="select max(update_date) from ";
-            //String q2=" order by update_date desc limit 1";
             String s = "";
-            //String query3 = "SELECT update_date FROM ";
             database = controller.getWritableDatabase();
+
             for (int k = 0; k < 4; k++) {
+
                 long cnt = 0;
+
                 try {
+
                     cnt = DatabaseUtils.queryNumEntries(database, view_name[k]);
+
                 } catch (Exception e) {
+
                     e.printStackTrace();
+
                 }
-                Fn.SystemPrintLn("count" + cnt);
+
                 if (cnt > 0) {
-//                     Fn.SystemPrintLn("entered");
+
                     Cursor d =database.rawQuery(q1+view_name[k],null);
                     d.moveToFirst();
                     s=d.getString(0);
                     timestamp[k] = s;
                 }
                 else {
+
                     timestamp[k] = "";
+
                 }
+
             }
+
             for (int j = 0; j < 4; j++) {
+
+
                 try {
+
                     URL url = new URL(url_select);
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setDoOutput(true);
                     conn.setRequestMethod("POST");
                     conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                    // write out form parameters
                     String postParamaters = "view_name=" + view_name[j] + "&latest_date="+timestamp[j];
                     conn.setFixedLengthStreamingMode(postParamaters.getBytes().length);
                     PrintWriter out = new PrintWriter(conn.getOutputStream());
                     out.print(postParamaters);
                     out.close();
-                    // conn.setRequestMethod("GET");
                     conn.connect();
                     is = conn.getInputStream();
+
                 } catch (Exception e) {
-                    Fn.logE("log_tag", "Error in http connection " + j + e.toString());
+
                 }
+
                 try {
+
                     BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
                     StringBuilder sb = new StringBuilder();
                     String line = "";
+
                     while ((line = br.readLine()) != null) {
                         sb.append(line + "\n");
                     }
+
                     is.close();
                     result = sb.toString();
 
-                    Fn.SystemPrintLn("hahaha" + result + "hahaha");
-
                 } catch (Exception e) {
-                    //  handle exception
-                    Fn.logE("log_tag", "Error converting result " + e.toString());
+
                 }
+
                 try {
-                    String errFlag;
                     String errMsg;
                     JSONObject jsonObject = new JSONObject(result);
-                    errFlag = jsonObject.getString("errFlag");
                     errMsg = jsonObject.getString("errMsg");
-//                     Fn.SystemPrintLn(errFlag + errMsg);
                     JSONObject UpdationObject;
                     JSONArray jsonArray;
+
                     if (jsonObject.has("likes"))
                     {
+
                         controller.deleteTable(j);
-                        Fn.logD("table"+j+"deleted","delete table called");
-                        ////controller.createTable(j);
                         jsonArray = jsonObject.getJSONArray("likes");
                         int count = 0;
+
                         while (count < jsonArray.length()) {
+
                             UpdationObject = jsonArray.getJSONObject(count);
                             queryValues = new HashMap<String, String>();
+
                             if (j == 0) {
+
                                 queryValues.put(controller.VEHICLETYPE_ID, UpdationObject.get(controller.VEHICLETYPE_ID).toString());
                                 queryValues.put(controller.CITY_ID, UpdationObject.get(controller.CITY_ID).toString());
                                 queryValues.put(controller.VEHICLE_NAME, UpdationObject.get(controller.VEHICLE_NAME).toString());
@@ -359,13 +458,17 @@ public class FlashActivity extends AppCompatActivity implements  GoogleApiClient
                                 queryValues.put(controller.IS_ACTIVE, UpdationObject.get(controller.IS_ACTIVE).toString());
                                 queryValues.put(controller.UPDATE_DATE, UpdationObject.get(controller.UPDATE_DATE).toString());
                                 controller.insert(queryValues, j);
+
                             } else if (j == 1) {
+
                                 queryValues.put(controller.CITY_ID, UpdationObject.get(controller.CITY_ID).toString());
                                 queryValues.put(controller.CITY_NAME, UpdationObject.get(controller.CITY_NAME).toString());
                                 queryValues.put(controller.IS_ACTIVE, UpdationObject.get(controller.IS_ACTIVE).toString());
                                 queryValues.put(controller.UPDATE_DATE, UpdationObject.get(controller.UPDATE_DATE).toString());
                                 controller.insert(queryValues, j);
+
                             } else if (j == 2) {
+
                                 queryValues.put(controller.VEHICLETYPE_ID, UpdationObject.get(controller.VEHICLETYPE_ID).toString());
                                 queryValues.put(controller.CITY_ID, UpdationObject.get(controller.CITY_ID).toString());
                                 queryValues.put(controller.VEHICLE_NAME, UpdationObject.get(controller.VEHICLE_NAME).toString());
@@ -375,34 +478,48 @@ public class FlashActivity extends AppCompatActivity implements  GoogleApiClient
                                 queryValues.put(controller.IS_ACTIVE, UpdationObject.get(controller.IS_ACTIVE).toString());
                                 queryValues.put(controller.UPDATE_DATE, UpdationObject.get(controller.UPDATE_DATE).toString());
                                 controller.insert(queryValues, j);
+
                             } else {
+
                                 queryValues.put(controller.VEHICLETYPE_ID, UpdationObject.get(controller.VEHICLETYPE_ID).toString());
                                 queryValues.put(controller.VEHICLE_NAME, UpdationObject.get(controller.VEHICLE_NAME).toString());
                                 queryValues.put(controller.IS_ACTIVE, UpdationObject.get(controller.IS_ACTIVE).toString());
                                 queryValues.put(controller.UPDATE_DATE, UpdationObject.get(controller.UPDATE_DATE).toString());
                                 controller.insert(queryValues, j);
+
                             }
+
                             count++;
+
                         }
+
                     }
                     else if(errMsg.compareTo("Your request successful")==0)
                     {
+
                         controller.deleteTable(j);
-                        Fn.logD("table" + j + "deleted", "delete table called");
-                        Fn.logD("Entered","where errMsg=your request successful");
+
                     }
                 } catch (Exception e) {
-                    // handle exception
-                    Fn.logE("log_tag", "Error parsing data " + e.toString());
+
                 }
+
             }
+
             return null;
+
         }
+
         protected void onPostExecute(Void v) {
+
             try {
+
                 controller.getAll();
+
             } catch (ParseException e) {
+
                 e.printStackTrace();
+
             }
             database.close();
         }
@@ -417,21 +534,30 @@ public class FlashActivity extends AppCompatActivity implements  GoogleApiClient
     }
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
         if (connectionResult.hasResolution()) {
+
             try {
-                // Start an Activity that tries to resolve the error
+
                 connectionResult.startResolutionForResult(this, CONNECTION_FAILURE_RESOLUTION_REQUEST);
+
             } catch (IntentSender.SendIntentException e) {
+
                 e.printStackTrace();
+
             }
+
         } else {
-            Fn.logE(TAG, "Location services connection failed with code " + connectionResult.getErrorCode());
+
         }
+
     }
     @Override
     public void onLocationChanged(Location location) {
+
     }
     public void getCity(Location location){
+
         double current_lat = location.getLatitude();
         double current_lng = location.getLongitude();
         String get_city_url = Constants.Config.ROOT_PATH+"get_city";
@@ -439,54 +565,72 @@ public class FlashActivity extends AppCompatActivity implements  GoogleApiClient
         hashMap.put("current_lat",String.valueOf(current_lat));
         hashMap.put("current_lng",String.valueOf(current_lng));
         sendVolleyRequest(get_city_url,Fn.checkParams(hashMap));
+
     }
+
     public void sendVolleyRequest(String URL, final HashMap<String,String> hMap){
+
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL, new Response.Listener<String>() {
+
             @Override
             public void onResponse(String response) {
-                Fn.logD("onResponse", String.valueOf(response));
+
                 CityGetSuccess(response);
+
             }
+
         }, new Response.ErrorListener() {
+
             @Override
             public void onErrorResponse(VolleyError error) {
-                Fn.logD("onErrorResponse", String.valueOf(error));
+
                 ErrorDialog(Constants.Title.NETWORK_ERROR, Constants.Message.NETWORK_ERROR);
+
             }
+
         }){
+
             @Override
             protected HashMap<String,String> getParams(){
                 return hMap;
             }
+
         };
+
         stringRequest.setTag(TAG);
         Fn.addToRequestQue(requestQueue, stringRequest, this);
+
     }
+
     private void ErrorDialog(String Title,String Message){
         Fn.showDialog(this, Title, Message);
     }
+
     private void CityGetSuccess(String response){
+
         try {
+
             JSONObject jsonObject = new JSONObject(response);
-           String errFlag = jsonObject.getString("errFlag");
+            String errFlag = jsonObject.getString("errFlag");
             String   errMsg = jsonObject.getString("errMsg");
-            Fn.logD("errFlag",errFlag);
-            Fn.logD("errMsg",errMsg);
+
             if(errFlag.equals("1")){
+
                 Fn.Toast(this,errMsg);
-                Fn.logD("toastNotdone", "toastNotdone");
                 ErrorDialog(Constants.Title.SERVER_ERROR, Constants.Message.SERVER_ERROR);
+
             }
             else if(errFlag.equals("0"))
             {
+
                 if(jsonObject.has("likes")) {
+
                     JSONArray jsonArray = jsonObject.getJSONArray("likes");
-//                    Fn.Toast(this,errMsg);
-                    Fn.logD("toastdone", "toastdone");
                     int count = 0;
+
                     while (count < jsonArray.length())
                     {
-                        Fn.logD("likes_entered", "likes_entered");
+
                         JSONObject JO = jsonArray.getJSONObject(count);
                         String received_city_id= JO.getString("city_id");
                         Fn.putPreference(this,Constants.Keys.CITY_ID,received_city_id);
@@ -495,19 +639,32 @@ public class FlashActivity extends AppCompatActivity implements  GoogleApiClient
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
+
                                 NextActivity();
+
                             }
                         }, Constants.Config.FLASH_TO_MAIN_DELAY);
+
                         count++;
+
                     }
+
                 }
                 else
                 {
+
                     ErrorDialog(Constants.Title.NO_SERVICE,Constants.Message.NO_SERVICE);
+
                 }
+
             }
+
         } catch (JSONException e) {
+
             e.printStackTrace();
+
         }
+
     }
+
 }

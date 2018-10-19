@@ -46,6 +46,7 @@ public class NavMenuAdapter extends ArrayAdapter<NavMenu>{
             {
                 holder = (NavMenuHolder)row.getTag();
             }
+
             NavMenu weather = data[position];
             holder.txtTitle.setText(weather.title);
             holder.imgIcon.setImageResource(weather.icon);
