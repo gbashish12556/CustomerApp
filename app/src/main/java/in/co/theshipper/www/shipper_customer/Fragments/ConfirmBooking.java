@@ -33,7 +33,7 @@ import java.util.HashMap;
 
 import in.co.theshipper.www.shipper_customer.Constants;
 import in.co.theshipper.www.shipper_customer.Controller.DBController;
-import in.co.theshipper.www.shipper_customer.Activities.FullActivity;
+import in.co.theshipper.www.shipper_customer.Activities.CompleteActivity;
 import in.co.theshipper.www.shipper_customer.Helper;
 import in.co.theshipper.www.shipper_customer.R;
 
@@ -353,15 +353,15 @@ public class ConfirmBooking extends Fragment implements View.OnClickListener{
                         Bundle bundle = new Bundle();
                         bundle.putString("crn_no",crn_no);
                         fragment.setArguments(Helper.CheckBundle(bundle));
-                        FragmentManager fragmentManager =FullActivity.fragmentManager;
+                        FragmentManager fragmentManager =CompleteActivity.fragmentManager;
                         FragmentTransaction transaction = fragmentManager.beginTransaction();
                         //                Fragment fragment = new BookNow();
                         transaction.replace(R.id.main_content, fragment,Constants.Config.CURRENT_FRAG_TAG);
 
-                        if((FullActivity.homeFragmentIndentifier == -5)) {
+                        if((CompleteActivity.homeFragmentIndentifier == -5)) {
 
                             transaction.addToBackStack(null);
-                            FullActivity.homeFragmentIndentifier =  transaction.commit();
+                            CompleteActivity.homeFragmentIndentifier =  transaction.commit();
 
                         } else {
 

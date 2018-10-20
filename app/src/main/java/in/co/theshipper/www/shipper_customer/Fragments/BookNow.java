@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import in.co.theshipper.www.shipper_customer.Constants;
-import in.co.theshipper.www.shipper_customer.Activities.FullActivity;
+import in.co.theshipper.www.shipper_customer.Activities.CompleteActivity;
 import in.co.theshipper.www.shipper_customer.Helper;
 import in.co.theshipper.www.shipper_customer.R;
 
@@ -94,9 +94,9 @@ public class BookNow extends Fragment implements View.OnClickListener {
 
         if(getActivity() != null) {
 
-        if (FullActivity.mGoogleApiClient.isConnected()) {
+        if (CompleteActivity.mGoogleApiClient.isConnected()) {
 
-            location = Helper.getAccurateCurrentlocation(FullActivity.mGoogleApiClient, getActivity());
+            location = Helper.getAccurateCurrentlocation(CompleteActivity.mGoogleApiClient, getActivity());
 
             if (location != null) {
 
@@ -236,15 +236,15 @@ public class BookNow extends Fragment implements View.OnClickListener {
                 bundle.putString("selected_booking_datetime", booking_datetime);
                 bundle.putString("selected_material_weight", weight_spinner.getSelectedItem().toString());
                 bundle.putString("selected_material_image", imgstring);
-                FragmentManager fragmentManager = FullActivity.fragmentManager;
+                FragmentManager fragmentManager = CompleteActivity.fragmentManager;
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 Fragment fragment = new ConfirmBooking();
                 fragment.setArguments(Helper.CheckBundle(bundle));
                 transaction.replace(R.id.main_content, fragment, Constants.Config.CURRENT_FRAG_TAG);
 
-                if ((FullActivity.homeFragmentIndentifier == -5)) {
+                if ((CompleteActivity.homeFragmentIndentifier == -5)) {
 
-                    FullActivity.homeFragmentIndentifier = transaction.commit();
+                    CompleteActivity.homeFragmentIndentifier = transaction.commit();
 
                 } else {
 

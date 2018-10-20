@@ -31,7 +31,7 @@ import java.util.HashMap;
 
 import in.co.theshipper.www.shipper_customer.Constants;
 import in.co.theshipper.www.shipper_customer.Utils.EndlessScrollListener;
-import in.co.theshipper.www.shipper_customer.Activities.FullActivity;
+import in.co.theshipper.www.shipper_customer.Activities.CompleteActivity;
 import in.co.theshipper.www.shipper_customer.Helper;
 import in.co.theshipper.www.shipper_customer.R;
 
@@ -200,14 +200,14 @@ public class CurrentBooking extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putString("crn_no",crn_no.getText().toString());
                 fragment.setArguments(Helper.CheckBundle(bundle));
-                FragmentManager fragmentManager =FullActivity.fragmentManager;
+                FragmentManager fragmentManager =CompleteActivity.fragmentManager;
                 FragmentTransaction transaction = fragmentManager.beginTransaction();
                 transaction.replace(R.id.main_content, fragment, Constants.Config.CURRENT_FRAG_TAG);
 
-                if((FullActivity.homeFragmentIndentifier == -5)){
+                if((CompleteActivity.homeFragmentIndentifier == -5)){
 
                     transaction.addToBackStack(null);
-                    FullActivity.homeFragmentIndentifier =  transaction.commit();
+                    CompleteActivity.homeFragmentIndentifier =  transaction.commit();
 
                 }else{
 

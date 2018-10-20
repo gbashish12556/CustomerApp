@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
+
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -15,11 +16,13 @@
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context=".Fragments.FinishedBookingDetail">
         <!-- TODO: Update blank fragment layout -->
+
         <RelativeLayout
             android:id="@+id/rellayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#fff">
+
             <TextView
                 android:id="@+id/booking_datetime"
                 android:layout_width="wrap_content"
@@ -28,6 +31,7 @@
                 android:layout_centerHorizontal="true"
                 android:textColor="@color/Black"
                 android:textSize="20sp" />
+
             <TextView
                 android:id="@+id/crn_no"
                 android:layout_width="wrap_content"
@@ -37,6 +41,7 @@
                 android:text="New Text"
                 android:textColor="@color/Black"
                 android:textSize="20sp" />
+
             <View
                 android:id="@+id/view"
                 android:layout_width="fill_parent"
@@ -46,6 +51,7 @@
                 android:layout_below="@+id/imageView"
                 android:layout_marginTop="54dp"
                 android:background="@color/LightGrey" />
+
             <View
                 android:id="@+id/view1"
                 android:layout_width="fill_parent"
@@ -55,6 +61,7 @@
                 android:layout_below="@+id/crn_no"
                 android:layout_marginTop="33dp"
                 android:background="@color/LightGrey" />
+
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
@@ -66,6 +73,7 @@
                 android:text="Driver:"
                 android:textColor="@color/Black"
                 android:textSize="12sp" />
+
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
@@ -79,6 +87,7 @@
                 android:textColor="@color/Black"
                 android:textSize="12sp"
                 android:layout_marginTop="20dp" />
+
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
@@ -90,6 +99,7 @@
                 android:textColor="@color/Black"
                 android:textSize="12sp"
                 android:layout_marginTop="20dp" />
+
             <TextView
                 android:id="@+id/vehicle_type"
                 android:layout_width="wrap_content"
@@ -100,6 +110,7 @@
                 android:text="New Text"
                 android:textColor="@color/Black"
                 android:textSize="12sp" />
+
             <TextView
                 android:id="@+id/driver_mobile_no"
                 android:layout_width="wrap_content"
@@ -110,6 +121,7 @@
                 android:layout_alignTop="@+id/textView3"
                 android:layout_alignLeft="@+id/driver_name"
                 android:layout_alignStart="@+id/driver_name" />
+
             <TextView
                 android:id="@+id/driver_name"
                 android:layout_width="wrap_content"
@@ -119,6 +131,7 @@
                 android:text="New Text"
                 android:textColor="@color/Black"
                 android:textSize="12sp" />
+
             <android.support.v7.widget.CardView
                 android:id="@+id/driver_image"
                 android:layout_width="50dp"
@@ -132,12 +145,15 @@
                 android:shape="ring"
                 android:thicknessRatio="1.9"
                 app:cardCornerRadius="25dp">
+
                 <ImageView
                     android:id="@+id/driver_imageview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:src="@drawable/loc" />
+
             </android.support.v7.widget.CardView>
+
             <android.support.v7.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -151,13 +167,16 @@
                 android:shape="ring"
                 android:thicknessRatio="1.9"
                 app:cardCornerRadius="25dp">
+
                 <ImageView
                     android:id="@+id/vehicleimage"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@drawable/vehicle_1"
                     android:textColor="@color/Black" />
+
             </android.support.v7.widget.CardView>
+
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="wrap_content"
@@ -170,6 +189,7 @@
                 android:textColor="@color/Black"
                 android:textSize="15sp"
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/pickup_point"
                 android:layout_width="wrap_content"
@@ -183,6 +203,7 @@
                 android:text="New Text"
                 android:textColor="@color/Black"
                 android:textSize="13sp" />
+
             <TextView
                 android:id="@+id/dropoff_point"
                 android:layout_width="wrap_content"
@@ -197,6 +218,7 @@
                 android:textColor="@color/Black"
                 android:textSize="13sp"
                 tools:ignore="NotSibling" />
+
             <TextView
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
@@ -209,6 +231,7 @@
                 android:textColor="@color/Black"
                 android:textSize="15sp"
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/ratingText"
                 android:layout_width="wrap_content"
@@ -220,6 +243,7 @@
                 android:textColor="@color/Black"
                 android:textSize="15sp"
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/total_fare"
                 android:layout_width="wrap_content"
@@ -231,6 +255,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/Black"
                 android:textStyle="bold" />
+
             <RatingBar
                 android:id="@+id/ratingBar"
                 android:layout_width="wrap_content"
@@ -239,6 +264,7 @@
                 android:layout_toLeftOf="@+id/driver_image"
                 android:layout_toStartOf="@+id/driver_image"
                 android:numStars="5" />
+
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="wrap_content"
@@ -250,6 +276,9 @@
                 android:layout_toLeftOf="@+id/pickup_point"
                 android:layout_toStartOf="@+id/pickup_point"
                 android:src="@drawable/loc" />
+
         </RelativeLayout>
+
     </FrameLayout>
+
 </ScrollView>

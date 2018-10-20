@@ -47,7 +47,7 @@ import java.util.TimerTask;
 
 import in.co.theshipper.www.shipper_customer.Constants;
 import in.co.theshipper.www.shipper_customer.Controller.DBController;
-import in.co.theshipper.www.shipper_customer.Activities.FullActivity;
+import in.co.theshipper.www.shipper_customer.Activities.CompleteActivity;
 import in.co.theshipper.www.shipper_customer.Helper;
 import in.co.theshipper.www.shipper_customer.R;
 
@@ -63,7 +63,7 @@ public class Book extends Fragment implements View.OnClickListener {
     public RequestQueue requestQueue;
     public HashMap<String,String> hashMap;
     private View view;
-    private String TAG = FullActivity.class.getName();
+    private String TAG = CompleteActivity.class.getName();
     private boolean stopTimer = false;
     private Location location;
     private SupportMapFragment mMapFragment;
@@ -191,15 +191,15 @@ public class Book extends Fragment implements View.OnClickListener {
     public void BookNow() {
 
             Helper.putPreference(context, "selected_vehicle", String.valueOf(vehicle_type));
-            FragmentManager fragmentManager =FullActivity.fragmentManager;
+            FragmentManager fragmentManager =CompleteActivity.fragmentManager;
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             Fragment fragment = new BookNow();
             transaction.replace(R.id.main_content, fragment, Constants.Config.CURRENT_FRAG_TAG);
 
-            if((FullActivity.homeFragmentIndentifier == -5)){
+            if((CompleteActivity.homeFragmentIndentifier == -5)){
 
                 transaction.addToBackStack(null);
-                FullActivity.homeFragmentIndentifier =  transaction.commit();
+                CompleteActivity.homeFragmentIndentifier =  transaction.commit();
 
             }else{
 
@@ -214,15 +214,15 @@ public class Book extends Fragment implements View.OnClickListener {
     public void BookLater() {
 
             Helper.putPreference(context, "selected_vehicle", String.valueOf(vehicle_type));
-            FragmentManager fragmentManager =FullActivity.fragmentManager;
+            FragmentManager fragmentManager =CompleteActivity.fragmentManager;
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             Fragment fragment = new BookLater();
             transaction.replace(R.id.main_content, fragment,Constants.Config.CURRENT_FRAG_TAG);
 
-            if((FullActivity.homeFragmentIndentifier == -5)){
+            if((CompleteActivity.homeFragmentIndentifier == -5)){
 
                 transaction.addToBackStack(null);
-                FullActivity.homeFragmentIndentifier =  transaction.commit();
+                CompleteActivity.homeFragmentIndentifier =  transaction.commit();
 
             }else{
 
@@ -266,11 +266,11 @@ public class Book extends Fragment implements View.OnClickListener {
 
                     mMap.setMyLocationEnabled(true);
 
-                    if (FullActivity.mGoogleApiClient.isConnected()) {
+                    if (CompleteActivity.mGoogleApiClient.isConnected()) {
 
                         do {
 
-                            location = Helper.getAccurateCurrentlocation(FullActivity.mGoogleApiClient, getActivity());
+                            location = Helper.getAccurateCurrentlocation(CompleteActivity.mGoogleApiClient, getActivity());
 
                         } while (location == null);
 
@@ -319,10 +319,10 @@ public class Book extends Fragment implements View.OnClickListener {
     public void LocationChanged() {
 
         try {
-            if(FullActivity.mGoogleApiClient.isConnected()) {
+            if(CompleteActivity.mGoogleApiClient.isConnected()) {
                     do{
                         if(getActivity()!=null) {
-                            location = Helper.getAccurateCurrentlocation(FullActivity.mGoogleApiClient, getActivity());
+                            location = Helper.getAccurateCurrentlocation(CompleteActivity.mGoogleApiClient, getActivity());
                         }
                     }while(location == null);
 
@@ -473,7 +473,7 @@ public class Book extends Fragment implements View.OnClickListener {
                         case Activity.RESULT_OK:
                             break;
                         case Activity.RESULT_CANCELED:
-                            Helper.showGpsAutoEnableRequest(FullActivity.mGoogleApiClient, getActivity());//keep asking if imp or do whatever
+                            Helper.showGpsAutoEnableRequest(CompleteActivity.mGoogleApiClient, getActivity());//keep asking if imp or do whatever
                             break;
                     }
                     break;

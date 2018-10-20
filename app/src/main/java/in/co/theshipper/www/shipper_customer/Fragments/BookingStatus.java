@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-import in.co.theshipper.www.shipper_customer.Activities.FullActivity;
+import in.co.theshipper.www.shipper_customer.Activities.CompleteActivity;
 import in.co.theshipper.www.shipper_customer.R;
 
 /**
@@ -55,7 +55,7 @@ public class BookingStatus extends Fragment implements ActionBar.TabListener{
         if(getActivity() != null) {
 
             view_pager = (ViewPager) view.findViewById(R.id.view_pager);
-            view_pager.setAdapter(new MyAdapter(FullActivity.fragmentManager));
+            view_pager.setAdapter(new MyAdapter(CompleteActivity.fragmentManager));
             view_pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
                 @Override
@@ -163,11 +163,11 @@ public class BookingStatus extends Fragment implements ActionBar.TabListener{
         super.onDestroyView();
 
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        List<Fragment> fragments = FullActivity.fragmentManager.getFragments();
+        List<Fragment> fragments = CompleteActivity.fragmentManager.getFragments();
 
         if (fragments != null) {
 
-            FragmentTransaction ft = FullActivity.fragmentManager.beginTransaction();
+            FragmentTransaction ft = CompleteActivity.fragmentManager.beginTransaction();
 
             for (Fragment f : fragments) {
                 //You can perform additional check to remove some (not all) fragments:

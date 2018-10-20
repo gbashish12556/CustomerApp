@@ -67,6 +67,7 @@
         <item>T&amp;C</item>
         <item>Logout</item>
     </string-array>
+
     <!--NAVIGATION DRAWER-->
     <string-array name="title_menu">
         <item>Book A Truck</item>
@@ -79,6 +80,7 @@
         <item>Booking Detail</item>
         <item>Finished Booking Detail</item>
     </string-array>
+
     <!--NAVIGATION DRAWER-->
     <string-array name="weight_list">
         <item>.5 Tonne</item>
@@ -106,15 +108,18 @@
         <item>12 Tonne</item>
         <item>12.5 Tonne</item>
     </string-array>
+
     <string-array name="zip_weight_list">
         <item>.5 Tonne</item>
         <item>&lt;1 Tonne</item>
     </string-array>
+
     <string-array name="ace_weight_list">
         <item>.5 Tonne</item>
         <item>1 Tonne</item>
         <item>&lt;1.5 Tonne</item>
     </string-array>
+
     <string-array name="pickup_weight_list">
         <item>.5 Tonne</item>
         <item>1 Tonne</item>
@@ -122,6 +127,7 @@
         <item>2 Tonne</item>
         <item>&lt;2.5 Tonne</item>
     </string-array>
+
     <string-array name="tata_weight_list">
         <item>.5 Tonne</item>
         <item>1 Tonne</item>
@@ -132,6 +138,7 @@
         <item>3.5 Tonne</item>
         <item>&lt;4 Tonne</item>
     </string-array>
+
     <!--SLIDE TAB MENU-->
     <string-array name="slide_tab_manu">
         <item>Current Booking</item>

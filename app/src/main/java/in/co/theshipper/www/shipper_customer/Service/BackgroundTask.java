@@ -14,7 +14,7 @@ import java.util.Random;
 
 import in.co.theshipper.www.shipper_customer.Constants;
 import in.co.theshipper.www.shipper_customer.Activities.EditProfile;
-import in.co.theshipper.www.shipper_customer.Activities.FullActivity;
+import in.co.theshipper.www.shipper_customer.Activities.CompleteActivity;
 import in.co.theshipper.www.shipper_customer.Helper;
 import in.co.theshipper.www.shipper_customer.Activities.OtpVerification;
 
@@ -181,7 +181,7 @@ public class BackgroundTask extends AsyncTask<String,Void, String> {
 
             } else if (method.equals("edit_customer_profile")) {
 
-                Intent intent = new Intent(ctx, FullActivity.class);
+                Intent intent = new Intent(ctx, CompleteActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 ctx.startActivity(intent);
 

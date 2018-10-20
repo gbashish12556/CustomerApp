@@ -7,17 +7,16 @@
 
             <LinearLayout style="@style/horizontal_LL.sm.8">
 
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
-    >
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true">
+
                 <RelativeLayout
                     android:background="#fff"
                     android:paddingLeft="4sp"
                     android:layout_height="match_parent"
-                    android:layout_width="match_parent"
-                    >
+                    android:layout_width="match_parent">
 
                     <TextView
                         android:id="@+id/pickup_point"
@@ -222,7 +221,8 @@
                         android:layout_toStartOf="@+id/total_fare" />
 
                 </RelativeLayout>
-</ScrollView>
+            </ScrollView>
+
             </LinearLayout>
 
             <LinearLayout
@@ -233,6 +233,9 @@
                     android:id="@+id/confirm_booking"
                     style="@style/normal_button"
                     android:text="@string/button_text_confirm_booking" />
+
             </LinearLayout>
+
         </LinearLayout>
-    </FrameLayout>
+
+ </FrameLayout>

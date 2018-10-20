@@ -4,16 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/list_view_selector">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/name"
-        />
+        android:id="@+id/name" />
+
     <TextView
         android:paddingTop="25dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/number"
+        android:id="@+id/number" />
 
-        />
 </RelativeLayout>

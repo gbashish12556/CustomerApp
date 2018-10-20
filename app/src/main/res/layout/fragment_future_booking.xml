@@ -4,14 +4,19 @@
     android:layout_height="match_parent"
     tools:context="in.co.theshipper.www.shipper_customer.Fragments.FutureBooking">
     <!-- TODO: Update blank fragment layout -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/future_booking_list">
+
         </ListView>
+
     </LinearLayout>
+
 </FrameLayout>

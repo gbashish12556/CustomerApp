@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import com.google.android.gms.gcm.GcmListenerService;
 
-import in.co.theshipper.www.shipper_customer.Activities.FullActivity;
+import in.co.theshipper.www.shipper_customer.Activities.CompleteActivity;
 import in.co.theshipper.www.shipper_customer.Helper;
 import in.co.theshipper.www.shipper_customer.R;
 
@@ -51,7 +51,7 @@ public class GcmMessageHandler extends GcmListenerService {
 
         body.clear();
 
-        Intent i = new Intent(this, FullActivity.class);
+        Intent i = new Intent(this, CompleteActivity.class);
         i.putExtras(Helper.CheckBundle(bundle));
         i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pi = PendingIntent.getActivity(this, 0, i, PendingIntent.FLAG_CANCEL_CURRENT);

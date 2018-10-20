@@ -186,7 +186,7 @@ public class EditProfile extends AppCompatActivity {
             Intent i = new Intent(this, RegistrationIntentService.class);
             startService(i);
             Helper.putPreference(this,"user_token",received_usertoken);
-            Intent intent = new Intent(this, FullActivity.class);
+            Intent intent = new Intent(this, CompleteActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
 

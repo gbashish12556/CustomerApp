@@ -295,7 +295,7 @@ public class FlashActivity extends AppCompatActivity implements  GoogleApiClient
 
         if (!user_token.equals("defaultStringIfNothingFound")) {
 
-            Intent intent1 = new Intent(this, FullActivity.class);
+            Intent intent1 = new Intent(this, CompleteActivity.class);
             intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent1);
             finish();

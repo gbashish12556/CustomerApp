@@ -52,7 +52,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import in.co.theshipper.www.shipper_customer.Constants;
-import in.co.theshipper.www.shipper_customer.Activities.FullActivity;
+import in.co.theshipper.www.shipper_customer.Activities.CompleteActivity;
 import in.co.theshipper.www.shipper_customer.Helper;
 import in.co.theshipper.www.shipper_customer.R;
 
@@ -436,11 +436,11 @@ public class BookingDetails extends Fragment implements View.OnClickListener{
 
                     mMap.setMyLocationEnabled(true);
 
-                    if (FullActivity.mGoogleApiClient.isConnected()) {
+                    if (CompleteActivity.mGoogleApiClient.isConnected()) {
 
                         do {
 
-                            location = Helper.getAccurateCurrentlocation(FullActivity.mGoogleApiClient, getActivity());
+                            location = Helper.getAccurateCurrentlocation(CompleteActivity.mGoogleApiClient, getActivity());
 
                         } while (location == null);
 
@@ -613,7 +613,7 @@ public class BookingDetails extends Fragment implements View.OnClickListener{
                         case Activity.RESULT_OK:
                             break;
                         case Activity.RESULT_CANCELED:
-                            Helper.showGpsAutoEnableRequest(FullActivity.mGoogleApiClient, getActivity());//keep asking if imp or do whatever
+                            Helper.showGpsAutoEnableRequest(CompleteActivity.mGoogleApiClient, getActivity());//keep asking if imp or do whatever
                             break;
 
                     }

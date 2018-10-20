@@ -69,7 +69,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyAppTheme" />
         <activity
-            android:name=".Activities.FullActivity"
+            android:name=".Activities.CompleteActivity"
             android:label="@string/title_activity_full"
             android:screenOrientation="portrait"
             android:theme="@style/MyAppTheme" >

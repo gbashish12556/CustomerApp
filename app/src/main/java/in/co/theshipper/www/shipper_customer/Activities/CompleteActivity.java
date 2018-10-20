@@ -48,9 +48,9 @@ import in.co.theshipper.www.shipper_customer.Adapter.NavMenuAdapter;
 import in.co.theshipper.www.shipper_customer.R;
 import in.co.theshipper.www.shipper_customer.Fragments.RateCard;
 
-public class FullActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener,AdapterView.OnItemClickListener{
+public class CompleteActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener,AdapterView.OnItemClickListener{
 
-    public  String TAG = FullActivity.class.getName();
+    public  String TAG = CompleteActivity.class.getName();
     private DrawerLayout drawerLayout;
     private ListView listView;
     private String[] NavList,TitleList;
@@ -68,7 +68,7 @@ public class FullActivity extends AppCompatActivity implements GoogleApiClient.C
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_full);
+        setContentView(R.layout.activity_complete);
 
         if (mGoogleApiClient == null) {
 
