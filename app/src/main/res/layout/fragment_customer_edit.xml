@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".CustomerEdit"
+    tools:context=".Fragments.CustomerEdit"
     style="@style/outer_layout">
     <LinearLayout
         style="@style/vertical_LL">

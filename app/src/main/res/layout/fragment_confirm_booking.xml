@@ -1,7 +1,7 @@
  <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         style="@style/outer_layout"
-        tools:context="in.co.theshipper.www.shipper_customer.ConfirmBooking">
+        tools:context="in.co.theshipper.www.shipper_customer.Fragments.ConfirmBooking">
 
         <LinearLayout style="@style/vertical_LL">
 

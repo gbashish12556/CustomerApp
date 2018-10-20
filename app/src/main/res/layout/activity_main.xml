@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="in.co.theshipper.www.shipper_customer.MainActivity"
+    tools:context="in.co.theshipper.www.shipper_customer.Activities.MainActivity"
     style="@style/outer_layout"
     >
     <LinearLayout

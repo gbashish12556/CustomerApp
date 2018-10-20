@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="in.co.theshipper.www.shipper_customer.About">
+    tools:context="in.co.theshipper.www.shipper_customer.Fragments.About">
     <!-- TODO: Update blank fragment layout -->
     <ScrollView
         android:layout_width="match_parent"

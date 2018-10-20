@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/outer_layout"
-    tools:context="in.co.theshipper.www.shipper_customer.OtpVerification">
+    tools:context="in.co.theshipper.www.shipper_customer.Activities.OtpVerification">
     <LinearLayout
         style="@style/vertical_LL">
         <LinearLayout

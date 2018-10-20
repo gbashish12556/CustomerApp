@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="in.co.theshipper.www.shipper_customer.FinishedBooking">
+    tools:context="in.co.theshipper.www.shipper_customer.Fragments.FinishedBooking">
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
