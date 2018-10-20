@@ -23,7 +23,7 @@ import java.util.HashMap;
  */
 // abbreviated tag name
 public class RegistrationIntentService extends IntentService {
-    
+
     protected RequestQueue requestQueue;
     protected HashMap<String,String> hashMap;
     private static final String TAG = RegistrationIntentService.class.getName();
